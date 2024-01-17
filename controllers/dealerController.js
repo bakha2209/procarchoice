@@ -69,8 +69,19 @@ dealerController.logout = (req, res) => {
   res.send("logout sahifasidasiz");
 };
 
+dealerController.validateAuthDealer = (req, res, next) => {
+  if (req.session?.member?.mb_type === "Dealer") {
+    req.member = req.session.member;
+    next();
+  } else
+    res.json({
+      state: "fail",
+      message: "only authenticated members with dealer type",
+    });
+};
+
 dealerController.checkSessions = (req, res) => {
-  if (req.session.member) {
+  if (req.session?.member) {
     res.json({ state: "succeed", data: req.session.member });
   } else {
     res.json({ state: "fail", message: "You are not authenticated" });
