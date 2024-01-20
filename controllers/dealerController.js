@@ -70,7 +70,8 @@ dealerController.logout = (req, res) => {
 };
 
 dealerController.validateAuthDealer = (req, res, next) => {
-  if (req.session?.member?.mb_type === "Dealer") {
+  console.log("checking:",req.session?.member)
+  if (req.session?.member?.mb_type === "DEALER") {
     req.member = req.session.member;
     next();
   } else
@@ -81,6 +82,7 @@ dealerController.validateAuthDealer = (req, res, next) => {
 };
 
 dealerController.checkSessions = (req, res) => {
+  console.log("sessions:", req.session?.member)
   if (req.session?.member) {
     res.json({ state: "succeed", data: req.session.member });
   } else {

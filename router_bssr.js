@@ -2,8 +2,7 @@ const express = require("express");
 const router_bssr = express.Router();
 const dealerController = require("./controllers/dealerController");
 const carController = require("./controllers/carController");
-const uploader_car = require("./utils/upload-multer")("cars")
-
+const uploader_car = require("./utils/upload-multer")("cars");
 
 /********************************
  *      BSSR EJS                *
@@ -22,12 +21,15 @@ router_bssr.get("/check-me", dealerController.checkSessions);
 
 router_bssr.get("/cars/menu", dealerController.getMyDealerData);
 router_bssr.post(
-    "/cars/create",
-    dealerController.validateAuthDealer,
-    uploader_product.array("product_images", 5),
-    carController.addNewCar
-     
-  );
-  router_bssr.post("cars/edit/:id", carController.updateChosenCar);
+  "/cars/create",
+  dealerController.validateAuthDealer,
+  uploader_car.array("car_images", 5),
+  carController.addNewCar
+);
+router_bssr.post(
+  "/cars/edit/:id",
+  dealerController.validateAuthDealer,
+  carController.updateChosenCar
+);
 
 module.exports = router_bssr;
