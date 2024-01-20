@@ -1,15 +1,16 @@
 const Member = require("../models/Member");
+const Car = require("../models/Car")
 
 let dealerController = module.exports;
 
-dealerController.getMyDealerData = async (req, res) => {
+dealerController.getMyDealerCars = async (req, res) => {
   try {
-    console.log(`GET: cont/getMyDealerData`);
-    //TODO: Get my dealer cars
-
-    res.render("dealer-menu");
+    console.log(`GET: cont/getMyDealerCars`)
+    const car = new Car();
+    const data = await car.getAllCarsDataDealer(res.locals.member)
+    res.render("dealer-menu", {dealer_data: data});
   } catch (err) {
-    console.log(`ERROR, cont/getMyDealerData, ${err.message}`);
+    console.log(`ERROR, cont/getMyDealerCars, ${err.message}`);
     res.json({ state: "fail", message: err.message });
   }
 };

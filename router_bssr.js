@@ -19,7 +19,7 @@ router_bssr.post("/login", dealerController.loginProcess);
 router_bssr.get("/logout", dealerController.logout);
 router_bssr.get("/check-me", dealerController.checkSessions);
 
-router_bssr.get("/cars/menu", dealerController.getMyDealerData);
+router_bssr.get("/cars/menu", dealerController.getMyDealerCars);
 router_bssr.post(
   "/cars/create",
   dealerController.validateAuthDealer,

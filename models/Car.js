@@ -9,6 +9,19 @@ const Definer =  require("../lib/mistake");
     constructor() {
         this.carModel = CarModel;
     }
+    async getAllCarsDataDealer(member) {
+      try {
+        member._id = shapeIntoMongooseObjectId(member._id);
+        const result = await this.carModel.find({
+          dealer_mb_id: member._id,
+        });
+        assert.ok(result, Definer.general_err1);
+        //console.log("result:", result)
+        return result;
+      } catch (err) {
+        throw err;
+      }
+    }
     async addNewCarData(data, member) {
         try {
           data.dealer_mb_id = shapeIntoMongooseObjectId(member._id);
