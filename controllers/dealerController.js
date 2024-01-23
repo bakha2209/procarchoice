@@ -1,7 +1,19 @@
 const Member = require("../models/Member");
 const Car = require("../models/Car")
+const Definer = require("../lib/mistake");
+const assert = require("assert");
 
 let dealerController = module.exports;
+
+dealerController.home = (req, res) => {
+  try {
+    console.log('GET: cont/home');
+    res.render("home-page");
+  } catch(err) {
+    console.log(`ERROR, cont/home, ${err.message}`)
+    res.json({state: 'fail', message: err.message})
+  }
+}
 
 dealerController.getMyDealerCars = async (req, res) => {
   try {
@@ -11,7 +23,7 @@ dealerController.getMyDealerCars = async (req, res) => {
     res.render("dealer-menu", {dealer_data: data});
   } catch (err) {
     console.log(`ERROR, cont/getMyDealerCars, ${err.message}`);
-    res.json({ state: "fail", message: err.message });
+    res.redirect("/resto");
   }
 };
 
@@ -28,10 +40,17 @@ dealerController.getSignupMyDealer = async (req, res) => {
 dealerController.signupProcess = async (req, res) => {
   try {
     console.log(`POST: cont/signup`);
-    const data = req.body,
-      member = new Member(),
-      new_member = await member.signupData(data);
-    req.session.member = new_member;
+    assert.ok(req.file, Definer.general_err3)
+    
+    let new_member = req.body;
+    new_member.mb_type = "DEALER";
+    new_member.mb_image = req.file.path.replace(/\\/g, '/');;
+
+    const member = new Member();
+    const result = await member.signupData(new_member);
+    assert.ok(result, Definer.general_err1)
+
+    req.session.member = result;
     res.redirect("/resto/cars/menu");
   } catch (err) {
     console.log(`ERROR, cont/signup, ${err.message}`);
@@ -57,7 +76,9 @@ dealerController.loginProcess = async (req, res) => {
       result = await member.loginData(data);
     req.session.member = result;
     req.session.save(function () {
-      res.redirect("/resto/cars/menu");
+      result.mb_type === "ADMIN"
+        ? res.redirect("/resto/all-dealer")
+        : res.redirect("/resto/cars/menu");
     });
   } catch (err) {
     console.log(`ERROR, cont/loginProcess, ${err.message}`);
@@ -66,8 +87,15 @@ dealerController.loginProcess = async (req, res) => {
 };
 
 dealerController.logout = (req, res) => {
-  console.log("GET cont.logout");
-  res.send("logout sahifasidasiz");
+  try {
+    console.log("GET cont/logout");
+    req.session.destroy(function () {
+      res.redirect("/resto");
+    });
+  } catch (err) {
+    console.log(`ERROR, cont/logout, ${err.message}`);
+    res.json({ state: "fail", message: err.message });
+  }
 };
 
 dealerController.validateAuthDealer = (req, res, next) => {

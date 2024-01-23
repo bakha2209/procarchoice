@@ -23,7 +23,7 @@ carController.addNewCar = async (req, res) => {
       let data = req.body;
 
       data.car_images = req.files.map((ele) => {
-          return ele.path.replace(/\\/g, '/');;
+          return ele.path.replace(/\\/g, '/');
       });
       
       const result = await car.addNewCarData(data, req.member);

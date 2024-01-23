@@ -3,6 +3,7 @@ const router_bssr = express.Router();
 const dealerController = require("./controllers/dealerController");
 const carController = require("./controllers/carController");
 const uploader_car = require("./utils/upload-multer")("cars");
+const uploader_members = require("./utils/upload-multer")("members");
 
 /********************************
  *      BSSR EJS                *
@@ -10,8 +11,14 @@ const uploader_car = require("./utils/upload-multer")("cars");
 
 //memberga dahldor routerlar
 
+router_bssr.get("/", dealerController.home);
+
 router_bssr.get("/sign-up", dealerController.getSignupMyDealer);
-router_bssr.post("/sign-up", dealerController.signupProcess);
+router_bssr.post(
+  "/sign-up",
+  uploader_members.single("dealer_img"),
+  dealerController.signupProcess
+);
 
 router_bssr.get("/login", dealerController.getLoginMyDealer);
 router_bssr.post("/login", dealerController.loginProcess);

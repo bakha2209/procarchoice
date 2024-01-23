@@ -1,17 +1,290 @@
 <%- include("includes/header")%>
-
+<link rel="stylesheet" type="text/css" href="/css/menu.css" />
 <body>
-  <h1>My Dealer page</h1>  
+  <div id="main_container">
+    <div class="group_name">
+      <ul class="nav justify-content-center">
+        <li class="nav-item" style="cursor: pointer">
+          <a class="nav-link active" href="/resto">Home</a>
+        </li>
 
-  <% if(!member) { %>
-  <h2>siz authenticated emassiz</h2>
-  <% } else { %>
+        <li class="nav-item" style="cursor: pointer">
+          <a class="nav-link active" href="/resto/cars/menu">MyDealer</a>
+        </li>
+        <li class="nav-item" style="cursor: pointer">
+          <a class="nav-link active" href="/resto/logout">Logout</a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="dealer_menu_frame">
+      <div class="dealer_container">
+        <div class="car_include">
+          <span class="new_car_txt">
+            <%= member.mb_nick.toUpperCase() %> Exist Cars</span
+          >
+          <table class="table table-bordered table-hover">
+            <thead class="thead-light">
+              <th scope="col">N/r</th>
+              <th scope="col">Car Brand</th>
+              <th scope="col">Name</th>
+              <th scope="col">Model</th>
+              <th scope="col">Engine Type</th>
+              <th scope="col">Car Type</th>
+              <th scope="col">Color</th>
+              <th scope="col">Price</th>
+              <th scope="col">Discount</th>
+              <th scope="col">Remain</th>
+              <th scope="col">Car Status</th>
+            </thead>
+            <% dealer_data.map((value, key) => { %>
+            <tbody style="background: white">
+              <td><%= key + 1 %></td>
+              <td><%= value.car_brand %></td>
+              <td><%= value.car_name %></td>
+              <td><%= value.car_model %></td>
+              <td><%= value.car_engine_type %></td>
+              <td><%= value.car_type %></td>
+              <td><%= value.car_color %></td>
+              <td><%= value.car_price %></td>
+              <td><%= value.car_discount %></td>
+              <td><%= value.car_left_cnt %></td>
+              
+              <td>
+                <select class="spec_select new_product_status" id="<%= value._id %>">
+                  <option value="PAUSED" <%= value.car_status === 'PAUSED' ? 'selected' : '' %>>PAUSED</option>
+                  <option value="PROCESS" <%= value.car_status === 'PROCESS' ? 'selected' : '' %>>PROCESS </option>
+
+                </select>
+              </td>
+            </tbody>
+            <% }); %>
+          </table>
+          <div class="long_input" style="align-items: flex-end; margin-bottom: 25px;">
+            <button class="btn btn-primary hiding_btn">Add New Car</button>
+          </div>
+        </div>
+
+        <form onsubmit="return validateForm()" action="/resto/cars/create"
+         method="POST" class="car_container" enctype="multipart/form-data">
+          <div class="long_input" style="display: flex; align-items: center;">
+            <span class="new_car_txt">New Car</span>
+          </div>
+          <div>
+            <div class="long_input">
+              <label for="">Car Brand</label>
+              <select name="car_brand" class="product_collection">
+                <option value="BMW" selected>BMW</option>
+                <option value="AUDI" selected>AUDI</option>
+                <option value="FORD" selected>FORD</option>
+                <option value="MERCEDES-BENZ" selected>MERCEDES-BENZ</option>
+                <option value="KIA" selected>KIA</option>
+                <option value="HYUNDAI" selected>HYUNDAI</option>
+                <option value="SAMSUNG" selected>SAMSUNG</option>
+                <option value="VOLVO" selected>VOLVO</option>
+                <option value="DAF" selected>DAF</option>
+                <option value="MAN" selected>MAN</option>
+                <option value="CHEVROLET" selected>CHEVROLET</option>
+              </select>
+            </div>
+
+            <div class="half_input_frame">
+              <div class="half_input">
+                <label for="">Name</label>
+                <input type="text" placeholder="Car Name" name="car_name" class="product_price">
+              </div>
+              <div class="half_input">
+                <label for="">Model</label>
+                <input type="text" placeholder="Car Model" name="car_model" class="product_left_cnt">
+              </div>
+            </div>
+
+            <div class="half_input_frame">
+              <div class="half_input">
+                <label for="">Engine Type</label>
+                <select name="car_engine_type" class="product_collection">
+                  <option value="gasoline" selected>gasoline</option>
+                  <option value="dizel" selected>dizel</option>
+                  <option value="gas" selected>gas</option>
+                  <option value="electric" selected>electric</option>
+                  <option value="hybrid" selected>hybrid</option>
+                </select>
+              </div>
   
-  <h2>
-    siz authenticated bolgansiz va sizning nickingiz <%= member.mb_nick%>
-    <p>sizning telefoningiz <%= member.mb_phone%></p>
-  </h2>
-  <% } %>  
+              <div class="half_input" id="product_size">
+                <label for="">Car Type</label>
+                <select name="car_type" class="product_size">
+                  <option value="CONVERTIBLE" selected>CONVERTIBLE</option>
+                  <option value="SUV" selected>SUV</option>
+                  <option value="PICKUP" selected>PICKUP</option>
+                  <option value="STATION WAGON" selected>STATION WAGON</option>
+                  <option value="SUPERCAR" selected>SUPERCAR</option>
+                  <option value="ROADSTER" selected>ROADSTER</option>
+                  <option value="COUPE" selected>COUPE</option>
+                  <option value="SEDAN" selected>SEDAN</option>
+                  <option value="CROSSOVER" selected>CROSSOVER</option>
+                  <option value="MPV" selected>MPV</option>
+                  <option value="4x4" selected>4x4</option>
+                  <option value="HATCHBACK" selected>HATCHBACK</option>
+                  <option value="SPORTS CAR" selected>SPORTS CAR</option>
+                  <option value="MINIVAN" selected>MINIVAN</option>
+                  <option value="CITY CAR" selected>CITY CAR</option>
+                  
+                </select>
+              </div>
+            </div>
+            
+            <div class="half_input_frame">
+              <div class="half_input">
+                <label for="">Color</label>
+                <select name="car_color" class="product_collection">
+                  <option value="white" selected>white</option>
+                  <option value="black" selected>black</option>
+                  <option value="red" selected>red</option>
+                  <option value="yellow" selected>yellow</option>
+                  <option value="green" selected>green</option>
+                  <option value="blue" selected>blue</option>
+                  <option value="grey" selected>grey</option>
+                </select>
+              </div>
+              <div class="half_input">
+                <label for="">Price</label>
+                <input  placeholder="Car Price" name="car_price" class="product_left_cnt">
+              </div>
+            </div>
+
+            <div class="half_input_frame">
+              <div class="half_input">
+                <label for="">Discount</label>
+                <input  placeholder=" Discount of price" name="car_discount" class="product_price">
+              </div>
+              <div class="half_input">
+                <label for="">Reamin</label>
+                <input  placeholder="Number of remained cars" name="car_left_cnt" class="product_left_cnt">
+              </div>
+            </div>
+
+            <div class="long_input">
+              <label for="">Description</label>
+              <textarea name="car_description" class="product_description"></textarea>
+            </div>
+
+            <div class="img_frame">
+              <label for="">Car Images</label>
+              <div class="media-frame">
+                <div class="upload_img_box">
+                  <img src="/images/procar.jpg" class="1" id="image_section_1" >
+                  <input type="file" id="file" name="car_images" class="image_one"
+                  onchange="previewFileHandler(this, 1)">
+                </div>
+                <div class="upload_img_box">
+                  <img src="/images/procar.jpg" class="2" id="image_section_2" >
+                  <input type="file" id="file" name="car_images" class="image_two"
+                  onchange="previewFileHandler(this, 2)">
+                </div>
+                <div class="upload_img_box">
+                  <img src="/images/procar.jpg" class="3" id="image_section_3" >
+                  <input type="file" id="file" name="car_images" class="image_three"
+                  onchange="previewFileHandler(this, 3)">
+                </div>
+                <div class="upload_img_box">
+                  <img src="/images/procar.jpg" class="4" id="image_section_4" >
+                  <input type="file" id="file" name="car_images" class="image_four"
+                  onchange="previewFileHandler(this, 4)">
+                </div>
+                <div class="upload_img_box">
+                  <img src="/images/procar.jpg" class="5" id="image_section_5" >
+                  <input type="file" id="file" name="car_images" class="image_five"
+                  onchange="previewFileHandler(this, 5)">
+                </div>
+                <input value="<%= member._id%>" name="dealer_id" class="restaurant_id" hidden>
+              </div>
+            </div>
+
+            <div class="long_input" style="align-items: flex-end;margin-bottom: 25px;">
+              <button type="submit" class="btn btn-primary" id="create_product">Save</button>
+            </div>
+
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    $(function() {
+      
+     $(".hiding_btn").on("click", () => {
+        $(".car_container").slideToggle(500);
+        $(".hiding_btn").css("display", "none")
+      })
+    });
+
+    //product status changer
+    $(".new_product_status").on("change", async function(e) {
+      const id = e.target.id;
+      const car_status = $(`#${id}.new_product_status`).val();
+      const mb_id = '<%= member._id %>';
+
+      try {
+        const response = await axios.post(`/resto/cars/edit/${id}`, {id: id, car_status: car_status});
+        const result = response.data;
+        console.log("result:", result);
+
+        if(result.state == 'success') {
+          alert('success');
+          location.reload();
+        } else {
+          alert(result.message)
+        }
+
+      } catch(err) {
+        console.log('updateChosenCar err:', err)
+      }
+    })
+
+    function validateForm() {
+      const dealer_mb_id = $(".dealer_mb_id").val(),
+      car_brand = $(".car_brand").val(),
+      car_name = $(".car_name").val(),
+      car_model = $(".car_model").val(),
+      car_engine_type = $(".car_engine_type").val(),
+      car_type = $(".car_type").val(),
+      car_color = $(".car_color").val();
+      car_price = $(".car_price").val();
+      car_discount = $(".car_discount").val();
+      car_left_cnt = $(".car_left_cnt").val();
+      car_status = $(".car_status").val();
+
+      if (dealer_mb_id =='' || car_brand =='' || car_name =='' || 
+      car_model =='' || car_engine_type =='' || 
+      car_type =='' || car_color =='' || car_price =='' || car_discount =='' || car_left_cnt =='' || car_status =='') {
+          alert("Please fill all the blank!");
+          return false;
+        } else return true;
+    }
+
+    function previewFileHandler(input, order) {
+      console.log(input);
+      const image_class_name = input.className;
+      const file = $(`.${image_class_name}`).get(0).files[0],
+        fileType = file['type'],
+        validImageTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+      if(!validImageTypes.includes(fileType)) {
+        alert("Please upload only allowed formats!: jpg, jpeg, png");
+      }  else {
+        if (file) {
+          let reader = new FileReader();
+          reader.onload = function() {
+            $(`#image_section_${order}`).attr("src", reader.result)
+          }
+          reader.readAsDataURL(file)
+        }
+      }
+    }
+
+  </script>
+
 </body>
 
 <%- include("includes/footer")%>

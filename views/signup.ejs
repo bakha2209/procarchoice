@@ -1,5 +1,165 @@
 <%- include("includes/header")%>
+<link rel="stylesheet" type="text/css" href="/css/login.css" />
 <body>
-   <h1>Signup page</h1>
+   <form
+   onsubmit="return validateSignupForm()"
+    class="login_container"
+    action="/resto/sign-up"
+    method="POST"
+    enctype="multipart/form-data"
+  >
+    <div class="login_frame" style="width: 650px; height: 730px">
+      <div class="login_top">
+        <span>Create an account</span>
+        <div>
+           <a href="/resto" style="color: #6440fb">Home</a>
+        </div>
+        <p>
+          Already have an account?
+          <a href="/resto/login" style="color: #6440fb">Login</a>
+        </p>
+      </div>
+
+      <div class="sign_input_frame">
+        <div class="sign_up_frame">
+          <label>Name</label>
+          <input
+            type="text"
+            name="mb_nick"
+            class="mb_nick"
+            placeholder="Name"
+            value=""
+            required
+          />
+        </div>
+
+        <div class="sign_up_frame">
+          <label>Phone Number</label>
+          <input
+            type="text"
+            name="mb_phone"
+            class="mb_phone"
+            placeholder="Phone Number"
+            value=""
+            required
+          />
+        </div>
+      </div>
+
+      <div class="sign_input_frame">
+        <div class="sign_up_frame">
+          <label>Password</label>
+          <input
+            type="password"
+            name="mb_password"
+            class="mb_password"
+            placeholder="Input Password"
+            value=""
+            required
+          />
+        </div>
+
+        <div class="sign_up_frame">
+          <label>Please Reenter the Password</label>
+          <input
+            type="password"
+            name="mb_confirm_password"
+            class="mb_confirm_password"
+            placeholder="Confirming Password"
+            value=""
+            required
+          />
+        </div>
+      </div>
+
+      <div class="login_input_frame">
+        <div class="media-frame">
+          <img class="upload_img_frame" src="/images/procar.jpg" />
+          <div class="upload_container">
+            <span class="media_text">Image of Dealer Company</span>
+            <div class="filebox bs3-primary preview-image">
+              <input
+                class="upload-name"
+                value="Choose an image"
+                disabled="disabled"
+              />
+              <label for="input_file">Upload an image</label>
+              <input
+                type="file"
+                name="dealer_img"
+                id="input_file"
+                placeholder="uploading an image"
+                class="upload-hidden form-control-file restaurant_img"
+              />
+            </div>
+            <p class="thumbnail_desc">
+              Please upload here an image of the Dealer Company <br />Attention: .jpg
+              .jpeg or .png.!
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <button class="login_btn btn" name="signup" type="submit">
+        Register
+      </button>
+    </div>
+  </form>
 </body>
+
+<script>
+   $(function () {
+     let fileTarget = $(".filebox .upload-hidden");
+     let filename = "";
+     fileTarget.on("change", function () {
+       if (window.FileReader) {
+         const uploading_file = $(this)[0].files[0];
+         const fileType = uploading_file["type"];
+         const validImageTypes = ["image/jpg", "image/jpeg", "image/png"];
+         if (!validImageTypes.includes(fileType)) {
+           alert(
+             "Please upload only allowed types of image: jpg, jpeg, and png"
+           );
+         } else {
+           if (uploading_file) {
+             console.log(URL.createObjectURL(uploading_file));
+             $(".upload_img_frame")
+               .attr("src", URL.createObjectURL(uploading_file))
+               .addClass("success");
+           }
+           filename = uploading_file.name;
+         }
+       }
+ 
+       $(this).siblings(".upload-name").val(filename);
+     });
+   });
+ 
+   function validateSignupForm() {
+     const mb_nick = $(".mb_nick").val();
+     const mb_phone = $(".mb_phone").val();
+     const mb_password = $(".mb_password").val();
+     const mb_confirm_password = $(".mb_confirm_password").val();
+     const dealer_img = $(".dealer_img").get(0).files[0] ?? null;
+ 
+     if (
+       mb_nick == "" ||
+       mb_phone == "" ||
+       mb_password == "" ||
+       mb_confirm_password == ""
+     ) {
+       alert("Please fill all the blank");
+       return false;
+     } else if (mb_password !== mb_confirm_password) {
+       alert(`Please input correct password`);
+       return false;
+     }
+ 
+     if (!restaurant_img) {
+       alert("Please upload an image!");
+       return false;
+     }
+     return true;
+   }
+ </script>
 <%- include("includes/footer")%>
