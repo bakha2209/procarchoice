@@ -2,6 +2,7 @@ const Member = require("../models/Member");
 const Car = require("../models/Car")
 const Definer = require("../lib/mistake");
 const assert = require("assert");
+const Dealer = require("../models/Dealer");
 
 let dealerController = module.exports;
 
@@ -116,5 +117,45 @@ dealerController.checkSessions = (req, res) => {
     res.json({ state: "succeed", data: req.session.member });
   } else {
     res.json({ state: "fail", message: "You are not authenticated" });
+  }
+};
+
+dealerController.validateAdmin = (req, res, next) => {
+  if (req.session?.member?.mb_type === "ADMIN") {
+    req.member = req.session.member;
+    next();
+  } else {
+    const html = `<script>
+                   alert('Admin page: Permission denied')
+                   window.location.replace('/resto')
+                 </script>`;
+    res.end(html);
+  }
+};
+
+dealerController.getAllDealers = async(req, res) => {
+  try {
+    console.log("GET: cont/getAllDealers");
+    const dealer = new Dealer();
+    const dealers_data = await dealer.getAllDealersData();
+    console.log("dealers_data:", dealers_data);
+    res.render("all-dealers", { dealers_data: dealers_data });
+    
+  } catch (err) {
+    console.log(`ERROR, cont/getAllDealers, ${err.message}`);
+    res.json({ state: "fail", message: err.message });
+  }
+};
+
+dealerController.updateDealerByAdmin = async (req, res) => {
+  try {
+    console.log("GET: cont/updateDealerByAdmin");
+
+    const dealer = new Dealer();
+    const result = await dealer.updateDealerByAdminData(req.body);
+    await res.json({ state: "success", data: result})
+  } catch (err) {
+    console.log(`ERROR, cont/updateDealerByAdmin, ${err.message}`);
+    res.json({ state: "fail", message: err.message });
   }
 };

@@ -39,4 +39,16 @@ router_bssr.post(
   carController.updateChosenCar
 );
 
+router_bssr.get(
+  "/all-dealer",
+  dealerController.validateAdmin,
+  dealerController.getAllDealers
+);
+
+router_bssr.post(
+  "/all-dealer/edit",
+  dealerController.validateAdmin,
+  dealerController.updateDealerByAdmin
+);
+
 module.exports = router_bssr;
