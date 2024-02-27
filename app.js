@@ -2,7 +2,7 @@ console.log("Web Serverni boshlash");
 const express = require("express");
 const app = express();
 const router = require("./router");
-
+const cookieParser = require("cookie-parser")
 const router_bssr = require("./router_bssr");
 
 let session = require("express-session");
@@ -16,6 +16,7 @@ const store = new MongoDBStore({
 app.use(express.static("public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser())
 
 // 2 Session code
 app.use(
