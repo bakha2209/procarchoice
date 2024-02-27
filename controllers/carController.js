@@ -6,12 +6,33 @@ let carController = module.exports;
 
 carController.getAllCars = async (req, res) => {
   try {
-    console.log("GET: cont/getAllCars");
+    console.log("POST: cont/getAllCars");
+    const car = new Car();
+    const result = await car.getAllCarsData(req.member, req.body);
+    res.json({ state: "succeed", data: result });
   } catch (err) {
     console.log(`ERROR, cont/getAllCars, ${err.message}`);
     res.json({ state: "fail", message: err.message });
   }
 };
+
+carController.getChosenCar = async (req, res) => {
+  try {
+    console.log("POST: cont/getChosenCar");
+    const car = new Car();
+    const id = req.params.id;
+    const result = await car.getChosenCarData(req.member, id);
+    res.json({ state: "success", data: result });
+  } catch (err) {
+    console.log(`ERROR, cont/getChosenCar, ${err.message}`)
+    res.json({state: 'fail', message: err.message})
+
+  }
+}
+
+/****************************************
+ * BSSR RELATED METHODS
+ ****************************************/
 
 carController.addNewCar = async (req, res) => {
   try {

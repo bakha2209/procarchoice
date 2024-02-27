@@ -50,7 +50,7 @@ const carSchema = new mongoose.Schema(
     car_status: {
       type: String,
       required: false,
-      default: "PAUSED",
+      default: "PROCESS",
       enum: {
         values: car_status_enums,
         message: "{VALUE} is not among permitted enum values",
