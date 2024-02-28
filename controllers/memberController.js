@@ -119,7 +119,7 @@ memberController.likeMemberChosen = async (req, res) => {
       like_ref_id,
       group_type
     );
-    
+
     res.json({ state: "success", data: result });
   } catch (err) {
     console.log(`ERROR, cont/likeMemberChosen, ${err.message}`);

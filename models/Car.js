@@ -65,7 +65,7 @@ class Car {
         .exec();
 
       assert.ok(result, Definer.general_err1);
-      return result;
+      return result[0];
     } catch (err) {
       throw err;
     }
