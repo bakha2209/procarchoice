@@ -6,6 +6,39 @@ const Dealer = require("../models/Dealer");
 
 let dealerController = module.exports;
 
+dealerController.getDealers = async (req, res) => {
+  try {
+    console.log("GET: cont/getDealers");
+    const data = req.query;
+    const dealer = new Dealer();
+    const result = await dealer.getDealersData(req.member, data)
+    //console.log("result:::", result)
+    res.json({state: "success", data: result})
+  } catch(err) {
+    console.log(`ERROR, cont/getDealers, ${err.message}`);
+    res.json({ state: "fail", message: err.message });
+  }
+}
+
+dealerController.getChosenDealer = async (req, res) => {
+  try {
+    console.log("GET: cont/getChosenDealer");
+    const id = req.params.id;
+    const dealer = new Dealer();
+    const result = await dealer.getChosenDealerData(req.member, id)
+    
+    res.json({state: "success", data: result})
+  } catch(err) {
+    console.log(`ERROR, cont/getChosenDealer, ${err.message}`);
+    res.json({ state: "fail", message: err.message });
+  }
+}
+
+/****************************************
+ * BSSR RELATED METHODS
+ ****************************************/
+
+
 dealerController.home = (req, res) => {
   try {
     console.log('GET: cont/home');
@@ -114,7 +147,7 @@ dealerController.validateAuthDealer = (req, res, next) => {
 dealerController.checkSessions = (req, res) => {
   console.log("sessions:", req.session?.member)
   if (req.session?.member) {
-    res.json({ state: "succeed", data: req.session.member });
+    res.json({ state: "success", data: req.session.member });
   } else {
     res.json({ state: "fail", message: "You are not authenticated" });
   }

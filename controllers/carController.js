@@ -9,7 +9,7 @@ carController.getAllCars = async (req, res) => {
     console.log("POST: cont/getAllCars");
     const car = new Car();
     const result = await car.getAllCarsData(req.member, req.body);
-    res.json({ state: "succeed", data: result });
+    res.json({ state: "success", data: result });
   } catch (err) {
     console.log(`ERROR, cont/getAllCars, ${err.message}`);
     res.json({ state: "fail", message: err.message });

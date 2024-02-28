@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const memberController =require("./controllers/memberController");
 const carController = require("./controllers/carController");
+const dealerController = require("./controllers/dealerController");
 
 /********************************
  *      REST API                *
@@ -29,6 +30,18 @@ router.get(
   "/cars/:id",
   memberController.retrieveAuthMember,
   carController.getChosenCar
+);
+
+//Dealer related routers
+router.get(
+  "/dealers",
+  memberController.retrieveAuthMember,
+  dealerController.getDealers
+);
+router.get(
+  "/dealers/:id",
+  memberController.retrieveAuthMember,
+  dealerController.getChosenDealer
 );
 
 

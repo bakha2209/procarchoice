@@ -50,7 +50,7 @@ class Car {
 
       if(member) {
         const member_obj = new Member();
-        member_obj.viewChosenItemByMember(member, id, "car")
+         await member_obj.viewChosenItemByMember(member, id, "car")
       }
 
       const result = await this.carModel
