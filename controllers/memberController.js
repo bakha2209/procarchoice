@@ -18,7 +18,7 @@ memberController.signup = async (req, res) => {
 
     res.cookie("access_token", token, {
       maxAge: 6 * 3600 * 1000,
-      httpOnly: true,
+      httpOnly: false,
     });
 
     res.json({ state: "success", data: new_member });
@@ -41,7 +41,7 @@ memberController.login = async (req, res) => {
 
     res.cookie("access_token", token, {
       maxAge: 6 * 3600 * 1000,
-      httpOnly: true,
+      httpOnly: false,
     });
 
     res.json({ state: "success", data: result });
@@ -53,7 +53,7 @@ memberController.login = async (req, res) => {
 
 memberController.logout = (req, res) => {
   console.log("GET cont.logout");
-  res.cookie("access_token", null, {maxAge:0, httpOnly:true})
+  res.cookie("access_token", null, { maxAge: 0, httpOnly: false });
   res.json({ state: "success", data: "logout successfully" });
 };
 
@@ -99,8 +99,30 @@ memberController.getChosenMember = async (req, res) => {
     const member = new Member();
     const result = await member.getChosenMemberData(req.member, id);
     res.json({ state: "success", data: result });
-  } catch(err) {
+  } catch (err) {
     console.log(`ERROR, cont/getChosenMember, ${err.message}`);
+    res.json({ state: "fail", message: err.message });
+  }
+};
+
+memberController.likeMemberChosen = async (req, res) => {
+  try {
+    console.log("GET cont/likeMemberChosen");
+    assert.ok(req.member, Definer.auth_err5);
+
+    const member = new Member(),
+      like_ref_id = req.body.like_ref_id,
+      group_type = req.body.group_type;
+
+    const result = await member.likeChosenItemByMember(
+      req.member,
+      like_ref_id,
+      group_type
+    );
+    
+    res.json({ state: "success", data: result });
+  } catch (err) {
+    console.log(`ERROR, cont/likeMemberChosen, ${err.message}`);
     res.json({ state: "fail", message: err.message });
   }
 };
@@ -114,4 +136,4 @@ memberController.retrieveAuthMember = (req, res, next) => {
     console.log(`ERROR, cont/retrieveAuthMember, ${err.message}`);
     next();
   }
-}
+};

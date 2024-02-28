@@ -4,6 +4,7 @@ const assert = require("assert");
 const {
   shapeIntoMongooseObjectId,
   board_id_enum_list,
+  lookup_auth_member_liked,
 } = require("../lib/config");
 const Member = require("./Member");
 
@@ -29,7 +30,7 @@ class Community {
       return await article.save();
     } catch (mongo_err) {
       console.log(mongo_err);
-      throw new Error(Definer.auth_err1);
+      throw new Error(Definer.mongo_validation_err1);
     }
   }
 
@@ -55,6 +56,7 @@ class Community {
             },
           },
           { $unwind: "$member_data" },
+          lookup_auth_member_liked(auth_mb_id)
         ])
         .exec();
       assert.ok(result, Definer.article_err2);
@@ -93,6 +95,7 @@ class Community {
             },
           },
           { $unwind: "$member_data" },
+          lookup_auth_member_liked(auth_mb_id)
         ])
         .exec();
       console.log("result:::", result);

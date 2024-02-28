@@ -1,6 +1,9 @@
 const CarModel = require("../schema/car_model");
 const assert = require("assert");
-const { shapeIntoMongooseObjectId } = require("../lib/config");
+const {
+  shapeIntoMongooseObjectId,
+  lookup_auth_member_liked,
+} = require("../lib/config");
 const Definer = require("../lib/mistake");
 const Member = require("./Member");
 
@@ -30,6 +33,7 @@ class Car {
           { $sort: sort },
           { $skip: (data.page * 1 - 1) * data.limit },
           { $limit: data.limit * 1 },
+          lookup_auth_member_liked(auth_mb_id),
         ])
         .exec();
 
@@ -48,17 +52,20 @@ class Car {
       const auth_mb_id = shapeIntoMongooseObjectId(member?._id);
       id = shapeIntoMongooseObjectId(id);
 
-      if(member) {
+      if (member) {
         const member_obj = new Member();
-         await member_obj.viewChosenItemByMember(member, id, "car")
+        await member_obj.viewChosenItemByMember(member, id, "car");
       }
 
       const result = await this.carModel
-        .aggregate([{ $match: { _id: id, car_status: "PROCESS" } }])
+        .aggregate([
+          { $match: { _id: id, car_status: "PROCESS" } },
+          lookup_auth_member_liked(auth_mb_id),
+        ])
         .exec();
 
       assert.ok(result, Definer.general_err1);
-      return result
+      return result;
     } catch (err) {
       throw err;
     }

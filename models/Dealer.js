@@ -2,7 +2,10 @@ const assert = require("assert");
 const Member = require("../models/Member");
 const MemberModel = require("../schema/member_model");
 const Definer = require("../lib/mistake");
-const { shapeIntoMongooseObjectId } = require("../lib/config");
+const {
+  shapeIntoMongooseObjectId,
+  lookup_auth_member_liked,
+} = require("../lib/config");
 
 class Dealer {
   constructor() {
@@ -36,11 +39,11 @@ class Dealer {
 
       aggregationQuery.push({ $skip: (data.page - 1) * data.limit });
       aggregationQuery.push({ $limit: data.limit });
-      //todo: check member auth member liked the chosen target
+      aggregationQuery.push(lookup_auth_member_liked(auth_mb_id))
 
       const result = await this.memberModel.aggregate(aggregationQuery).exec();
       assert.ok(result, Definer.general_err1);
-      
+
       return result;
     } catch (err) {
       throw err;
