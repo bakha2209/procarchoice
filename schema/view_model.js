@@ -9,12 +9,14 @@ const viewSchema = new mongoose.Schema({
     type: String,
     required: true,
     enum: { values: like_view_group_list },
+    message: "{VALUE} is not among permitted values"
   },
   bo_id: {
     type: String,
     required:false,
     enum: {
-        values: board_id_enum_list
+        values: board_id_enum_list,
+        message: "{VALUE} is not among permitted values"
     }
   }
 },{timestamps: {createdAt:true}});
