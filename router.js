@@ -1,17 +1,17 @@
 const express = require("express");
 const router = express.Router();
-const memberController =require("./controllers/memberController");
+const memberController = require("./controllers/memberController");
 const carController = require("./controllers/carController");
 const dealerController = require("./controllers/dealerController");
 const orderController = require("./controllers/orderController");
 const communityController = require("./controllers/communityController");
 const uploader_member = require("./utils/upload-multer")("members");
 const uploader_community = require("./utils/upload-multer")("community");
-
+const followController = require("./controllers/followController");
 
 /********************************
  *      REST API                *
-*********************************/
+ *********************************/
 
 //memberga dahldor routerlar
 
@@ -92,7 +92,22 @@ router.get(
   memberController.retrieveAuthMember,
   communityController.getChosenArticle
 );
+//following related routers
+router.post(
+  "/follow/subscribe",
+  memberController.retrieveAuthMember,
+  followController.subscribe
+);
+router.post(
+  "/follow/unsubscribe",
+  memberController.retrieveAuthMember,
+  followController.unsubscribe
+);
+router.get("/follow/followings", followController.getMemberFollowings);
+router.get(
+  "/follow/followers",
+  memberController.retrieveAuthMember,
+  followController.getMemberFollowers
+);
 
-
-
-module.exports = router
+module.exports = router;
