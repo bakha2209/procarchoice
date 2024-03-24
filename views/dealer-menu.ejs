@@ -36,6 +36,10 @@
               <th scope="col">Discount</th>
               <th scope="col">Remain</th>
               <th scope="col">Car Status</th>
+              <th scope="col">Transmission</th>
+              <th scope="col">Consumption(in 100km)</th>
+              <th scope="col">Acceleration(cc)</th>
+              <th scope="col">Year</th>
             </thead>
             <% dealer_data.map((value, key) => { %>
             <tbody style="background: white">
@@ -57,6 +61,10 @@
 
                 </select>
               </td>
+              <td><%= value.car_transmission %></td>
+              <td><%= value.petrol_consumption %></td>
+              <td><%= value.acceleration %></td>
+              <td><%= value.produced_year %></td>
             </tbody>
             <% }); %>
           </table>
@@ -104,7 +112,7 @@
                 <label for="">Engine Type</label>
                 <select name="car_engine_type" class="product_collection">
                   <option value="gasoline" selected>gasoline</option>
-                  <option value="dizel" selected>dizel</option>
+                  <option value="diesel" selected>diesel</option>
                   <option value="gas" selected>gas</option>
                   <option value="electric" selected>electric</option>
                   <option value="hybrid" selected>hybrid</option>
@@ -144,7 +152,7 @@
                   <option value="yellow" selected>yellow</option>
                   <option value="green" selected>green</option>
                   <option value="blue" selected>blue</option>
-                  <option value="grey" selected>grey</option>
+                  <option value="gray" selected>gray</option>
                 </select>
               </div>
               <div class="half_input">
@@ -161,6 +169,32 @@
               <div class="half_input">
                 <label for="">Remain</label>
                 <input  placeholder="Number of remained cars" name="car_left_cnt" class="product_left_cnt">
+              </div>
+            </div>
+
+            <div class="half_input_frame">
+              <div class="half_input">
+                <label for="">Transmission</label>
+                <select name="car_transmission" class="product_collection">
+                  <option value="AUTOMATIC" selected>AUTOMATIC</option>
+                  <option value="MANUAL" selected>MANUAL</option>
+                  
+                </select>
+              </div>
+              <div class="half_input">
+                <label for="">Consumption</label>
+                <input  placeholder="petrol consumption in 100km" name="petrol_consumption" class="product_left_cnt">
+              </div>
+            </div>
+
+            <div class="half_input_frame">
+              <div class="half_input">
+                <label for="">Acceleration</label>
+                <input  placeholder="acceleration in 100km" name="acceleration" class="product_price">
+              </div>
+              <div class="half_input">
+                <label for="">Year</label>
+                <input  placeholder="Produced Year" name="produced_year" class="product_left_cnt">
               </div>
             </div>
 

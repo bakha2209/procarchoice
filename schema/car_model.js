@@ -5,6 +5,7 @@ const {
   car_type_enums,
   car_status_enums,
   car_color_enums,
+  car_transmission_enums,
 } = require("../lib/config");
 const Schema = mongoose.Schema;
 const carSchema = new mongoose.Schema(
@@ -69,7 +70,27 @@ const carSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-
+    car_transmission: {
+      type: String,
+      required: true,
+      default: "AUTOMATIC",
+      enum: {
+        values: car_transmission_enums,
+        message: "{VALUE} is not among permitted enum values",
+      },
+    },
+    petrol_consumption: {
+      type:Number,
+      required:true
+    },
+    acceleration: {
+      type:Number,
+      required: true
+    },
+    produced_year: {
+      type:Number,
+      required:true
+    },
     car_description: { type: String, required: true },
     car_images: { type: Array, required: false, default: [] },
     car_likes: {

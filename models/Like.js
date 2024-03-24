@@ -26,7 +26,7 @@ class Like {
             .exec();
           break;
         case "car":
-          result = await this.productModel
+          result = await this.carModel
             .findOne({
               _id: id,
               car_status: "PROCESS",
@@ -112,7 +112,7 @@ class Like {
             .exec();
           break;
         case "car":
-          await this.productModel
+          await this.carModel
             .findByIdAndUpdate(
               {
                 _id: like_ref_id,

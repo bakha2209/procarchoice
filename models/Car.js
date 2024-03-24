@@ -17,12 +17,23 @@ class Car {
       const auth_mb_id = shapeIntoMongooseObjectId(member?._id);
 
       let match = { car_status: "PROCESS" };
-      // if (data.dealer_mb_id) {
-      //   match["dealer_mb_id"] = shapeIntoMongooseObjectId(
-      //     data.dealer_mb_id
-      //   );
-      //   match["product_collection"] = data.product_collection;
-      // }
+      if (data.dealer_mb_id) {
+        match["dealer_mb_id"] = shapeIntoMongooseObjectId(
+          data.dealer_mb_id
+        )}
+      if (data.car_brand) {
+      
+        match["car_brand"] = data.car_brand;
+      }   if (data.car_color) {
+        match["car_color"] = data.car_color}
+        if (data.car_type) {
+        match["car_type"] = data.car_type;
+      }  if (data.car_engine_type) {
+        match["car_engine_type"] = data.car_engine_type;
+      } 
+       if (data.car_transmission) {
+        match["car_transmission"] = data.car_transmission;
+      } 
 
       const sort =
         data.order === "car_price" ? { [data.order]: 1 } : { [data.order]: -1 };

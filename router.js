@@ -49,7 +49,7 @@ router.get(
   dealerController.getDealers
 );
 router.get(
-  "/dealers/:id",
+  "/dealer/:id",
   memberController.retrieveAuthMember,
   dealerController.getChosenDealer
 );
