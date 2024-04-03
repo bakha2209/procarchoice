@@ -17,7 +17,7 @@ class Order {
       const mb_id = shapeIntoMongooseObjectId(member._id);
 
       data.map((item) => {
-        order_total_amount += item["quantity"] * item["price"];
+        order_total_amount += item["quantity"] * (item["price"] - (item["price"]*item["discount"]/100));
       });
 
       const order_id = await this.saveOrderData(order_total_amount, mb_id);
@@ -68,6 +68,7 @@ class Order {
       const order_item = new this.orderItemModel({
         item_quantity: item["quantity"],
         item_price: item["price"],
+        item_discount:item["discount"],
         order_id: order_id,
         car_id: item["_id"],
       });

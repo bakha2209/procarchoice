@@ -40,10 +40,17 @@ class Community {
       mb_id = shapeIntoMongooseObjectId(mb_id);
       const page = inquery["page"] ? inquery["page"] * 1 : 1;
       const limit = inquery["limit"] ? inquery["limit"] * 1 : 5;
+      let match = { mb_id: mb_id, art_status: "active" };
+      
+
+      if (inquery.bo_id) {
+        
+        match["bo_id"] = inquery.bo_id === "all" ? { $in: board_id_enum_list } : inquery.bo_id;
+      }
 
       const result = await this.boArticleModel
         .aggregate([
-          { $match: { mb_id: mb_id, art_status: "active" } },
+          { $match: match },
           { $sort: { createdAt: -1 } },
           { $skip: (page - 1) * limit },
           { $limit: limit },
@@ -56,7 +63,7 @@ class Community {
             },
           },
           { $unwind: "$member_data" },
-          lookup_auth_member_liked(auth_mb_id)
+          lookup_auth_member_liked(auth_mb_id),
         ])
         .exec();
       assert.ok(result, Definer.article_err2);
@@ -95,7 +102,7 @@ class Community {
             },
           },
           { $unwind: "$member_data" },
-          lookup_auth_member_liked(auth_mb_id)
+          lookup_auth_member_liked(auth_mb_id),
         ])
         .exec();
       console.log("result:::", result);
