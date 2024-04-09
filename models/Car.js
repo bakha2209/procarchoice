@@ -18,33 +18,35 @@ class Car {
 
       let match = { car_status: "PROCESS" };
       if (data.dealer_mb_id) {
-        match["dealer_mb_id"] = shapeIntoMongooseObjectId(
-          data.dealer_mb_id
-        )}
+        match["dealer_mb_id"] = shapeIntoMongooseObjectId(data.dealer_mb_id);
+      }
       if (data.car_brand) {
-      
         match["car_brand"] = data.car_brand;
-      }   if (data.car_color) {
-        match["car_color"] = data.car_color}
-        if (data.car_type) {
+      }
+      if (data.car_color) {
+        match["car_color"] = data.car_color;
+      }
+      if (data.car_type) {
         match["car_type"] = data.car_type;
-      }  if (data.car_engine_type) {
+      }
+      if (data.car_engine_type) {
         match["car_engine_type"] = data.car_engine_type;
-      } 
-       if (data.car_transmission) {
+      }
+      if (data.car_transmission) {
         match["car_transmission"] = data.car_transmission;
-      } if (data.produced_year) {
-        match["produced_year"] = {$gte:data.produced_year}
-      } if (data.car_price) {
-        match["car_price"] = {$gte:data.car_price};
-      } 
-
-      
+      }
+      if (data.produced_year) {
+        match["produced_year"] = { $gte: data.produced_year };
+      }
+      if (data.car_price) {
+        match["car_price"] = { $gte: data.car_price };
+      }
+      const sort = { [data.order]: -1 }; //elementni dynamic qiymati uchun
 
       const result = await this.carModel
         .aggregate([
           { $match: match },
-          
+          { $sort: sort },
           { $skip: (data.page * 1 - 1) * data.limit },
           { $limit: data.limit * 1 },
           lookup_auth_member_liked(auth_mb_id),
