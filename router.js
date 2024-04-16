@@ -5,6 +5,7 @@ const carController = require("./controllers/carController");
 const dealerController = require("./controllers/dealerController");
 const orderController = require("./controllers/orderController");
 const communityController = require("./controllers/communityController");
+const eventController = require("./controllers/eventContoller")
 const uploader_member = require("./utils/upload-multer")("members");
 const uploader_community = require("./utils/upload-multer")("community");
 const followController = require("./controllers/followController");
@@ -30,6 +31,12 @@ router.post(
   memberController.likeMemberChosen
 );
 router.post(
+  "/member-review",
+  memberController.retrieveAuthMember,
+  memberController.reviewMemberChosen
+);
+
+router.post(
   "/member/update",
   memberController.retrieveAuthMember,
   uploader_member.single("mb_image"),
@@ -41,6 +48,11 @@ router.post(
   "/cars",
   memberController.retrieveAuthMember,
   carController.getAllCars
+);
+router.get(
+  "/cars",
+  memberController.retrieveAuthMember,
+  carController.getAllCarsCategories
 );
 router.get(
   "/cars/:id",
@@ -120,5 +132,12 @@ router.get(
   memberController.retrieveAuthMember,
   followController.getMemberFollowers
 );
+
+// event related routers
+router.post(
+  "/events",
+  memberController.retrieveAuthMember,
+  eventController.getAllEvents
+)
 
 module.exports = router;

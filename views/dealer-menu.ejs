@@ -68,16 +68,81 @@
             </tbody>
             <% }); %>
           </table>
+          <table class="table table-bordered table-hover">
+            <thead class="thead-light">
+              <th scope="col">N/r</th>
+              <th scope="col">Event title</th>
+              <th scope="col">Event date</th>
+              <th scope="col">Event address</th>
+              <th scope="col">Event status</th>
+            </thead>
+            <% event_data.map((value, key) => { %>
+              <tbody style="background: white">
+                <td><%= key + 1 %></td>
+              <td><%= value.event_name %></td>
+              <td><%= value.event_date %></td>
+              <td><%= value.event_address %></td>
+              <<td>
+                <select class="spec_select new_event_status" id="<%= value._id %>">
+                  <option value="PAUSED" <%= value.event_status === 'PAUSED' ? 'selected' : '' %>>PAUSED</option>
+                  <option value="PROCESS" <%= value.event_status === 'PROCESS' ? 'selected' : '' %>>PROCESS </option>
+
+                </select>
+              </td>
+              </tbody>
+              <% }); %> 
+          </table>
           <div class="long_input" style="align-items: flex-end; margin-bottom: 25px;">
-            <button class="btn btn-primary hiding_btn">Add New Car</button>
+            <button class="btn btn-primary hiding_btn add_car_btn">Add New Car</button>
+          </div>
+          <div class="long_input" style="align-items: flex-end; margin-bottom: 25px;">
+            <button class="btn btn-primary hiding_event_btn add_event_btn">Add New Event</button>
           </div>
         </div>
+        <form onsubmit="return validateForm_event()" action="/resto/events/create"
+        method="POST" class="event_container" enctype="multipart/form-data">
+        <div class="long_input" style="display: flex; align-items: center;">
+          <span class="new_car_txt">New Event</span>
+        </div>
+        <div class="half_input">
+          <label for="">Event Title</label>
+          <textarea name="event_name" class="product_description"></textarea>
+        </div>
+        <div class="half_input">
+          <label for="">Event Date</label>
+          <textarea name="event_date" class="product_description"></textarea>
+        </div>
+        <div class="long_input">
+          <label for="">Event Content</label>
+          <textarea name="event_content" class="product_description"></textarea>
+        </div>
+        <div class="half_input">
+          <label for="">Event Address</label>
+          <textarea name="event_address" class="product_description"></textarea>
+        </div>
+        <div class="img_frame_event">
+          <label for="">Event Image</label>
+          <div class="media-frame_event">
+            <div class="upload_img_box1">
+              <img src="/images/procar.jpg" class="6" id="image_section_6" >
+              <input type="file" id="file" name="event_image" class="image_six"
+              onchange="previewFileHandler(this, 6)">
+            </div>
+            <input value="<%= member._id%>" name="mb_id" class="dealer_id" hidden>
+          </div>
+            
+        </div>
+        <div class="long_input" style="align-items: flex-end;margin-bottom: 25px;">
+          <button type="submit" class="btn btn-primary" id="create_event">Save</button>
+        </div>
+      </form>
 
         <form onsubmit="return validateForm()" action="/resto/cars/create"
          method="POST" class="car_container" enctype="multipart/form-data">
           <div class="long_input" style="display: flex; align-items: center;">
             <span class="new_car_txt">New Car</span>
           </div>
+          
           <div>
             <div class="long_input">
               <label for="">Car Brand</label>
@@ -202,6 +267,7 @@
               <label for="">Description</label>
               <textarea name="car_description" class="product_description"></textarea>
             </div>
+            
 
             <div class="img_frame">
               <label for="">Car Images</label>
@@ -247,12 +313,22 @@
   
   <script>
     $(function() {
+      $(".add_event_btn").on("click", () => {
+        event.preventDefault();
+        $(".event_container").slideToggle(500)
+        $(".hiding_event_btn").css("display", "none")
+        $(".car_container").slideUp(500);
+        $(".hiding_btn").css("display", "block");
+    });
+     $(".add_car_btn").on("click", () => {
       
-     $(".hiding_btn").on("click", () => {
         $(".car_container").slideToggle(500);
         $(".hiding_btn").css("display", "none")
+        $(".event_container").slideUp(500);
+        $(".add_event_btn").css("display", "block");
       })
     });
+    
 
     //product status changer
     $(".new_product_status").on("change", async function(e) {
@@ -277,6 +353,30 @@
       }
     })
 
+    //event status changer
+    $(".new_event_status").on("change", async function(e) {
+      const id = e.target.id;
+      const car_status = $(`#${id}.new_event_status`).val();
+      const mb_id = '<%= member._id %>';
+
+      try {
+        const response = await axios.post(`/resto/events/edit/${id}`, {id: id, event_status: event_status});
+        const result = response.data;
+        console.log("result:", result);
+
+        if(result.state == 'success') {
+          alert('success');
+          //location.reload();
+        } else {
+          alert(result.message)
+        }
+
+      } catch(err) {
+        console.log('updateChosenCar err:', err)
+      }
+    })
+
+
     function validateForm() {
       const dealer_mb_id = $(".dealer_mb_id").val(),
       car_brand = $(".car_brand").val(),
@@ -297,6 +397,21 @@
           return false;
         } else return true;
     }
+     function validateForm_event() {
+      const dealer_mb_id = $(".dealer_id").val(),
+      event_name = $(".event_name").val(),
+      event_date = $(".event_date").val(),
+      event_content = $(".event_content").val(),
+      event_image = $(".event_image").val(),
+      event_address = $(".event_address").val()
+
+      if (dealer_mb_id =='' || event_name =='' || event_date =='' || 
+      event_content =='' || event_image =='' || 
+      event_address =='') {
+        alert("Please fill all the blank!");
+          return false;
+      } else return true;
+     }
 
     function previewFileHandler(input, order) {
       console.log(input);

@@ -15,6 +15,18 @@ carController.getAllCars = async (req, res) => {
     res.json({ state: "fail", message: err.message });
   }
 };
+carController.getAllCarsCategories = async (req, res) => {
+  try {
+    console.log("GET: cont/getAllCarscategories");
+    const data = req.query;
+    const car = new Car();
+    const result = await car.getAllCarsCategoriesData(req.member, data);
+    res.json({ state: "success", data: result });
+  } catch (err) {
+    console.log(`ERROR, cont/getAllCarsCategories, ${err.message}`);
+    res.json({ state: "fail", message: err.message });
+  }
+};
 
 carController.getChosenCar = async (req, res) => {
   try {
@@ -46,6 +58,8 @@ carController.addNewCar = async (req, res) => {
       data.car_images = req.files.map((ele) => {
           return ele.path.replace(/\\/g, '/');
       });
+
+      
       
       const result = await car.addNewCarData(data, req.member);
 

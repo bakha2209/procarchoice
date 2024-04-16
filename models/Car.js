@@ -62,6 +62,33 @@ class Car {
       throw err;
     }
   }
+  async getAllCarsCategoriesData(member, data) {
+    const auth_mb_id = shapeIntoMongooseObjectId(member?._id);
+    const limit = parseInt(data.limit)
+      const page = parseInt(data.page);
+    try {
+      let match = { car_status: "PROCESS" };
+      if (data.car_brand) {
+        match["car_brand"] = data.car_brand;
+      } else if (data.car_type) {
+        match["car_type"] = data.car_type;
+      }
+      const sort = { [data.order]: -1 };
+      const result = await this.carModel
+        .aggregate([
+          { $match: match },
+          { $sort: sort },
+          { $skip: parseInt((page - 1) * limit) },
+          { $limit: limit },
+          lookup_auth_member_liked(auth_mb_id),
+        ])
+        .exec();
+      assert.ok(result, Definer.general_err1);
+      return result;
+    } catch (err) {
+      throw err;
+    }
+  }
 
   async getChosenCarData(member, id) {
     try {

@@ -29,6 +29,8 @@ const boArticleSchema = new mongoose.Schema(
     },
     art_likes: { type: Number, required: false, default: 0 },
     art_views: { type: Number, required: false, default: 0 },
+    art_reviews: { type: Array, required: false, default: [] },
+    art_rating: { type: Number, required: false, default: 0 },
     mb_id: { type: Schema.Types.ObjectId, ref: "Member", required: true },
   },
   { timestamps: true }

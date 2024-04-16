@@ -73,6 +73,16 @@ const memberSchema = new mongoose.Schema(
       required: false,
       default: 0,
     },
+    mb_reviews: {
+      type: Array,
+      required: false,
+      default: []
+    },
+    mb_rating: {
+      type: Number,
+      required: false,
+      default: 0
+    },
     mb_follow_cnt: {
       type: Number,
       required: false,
@@ -82,7 +92,8 @@ const memberSchema = new mongoose.Schema(
       type: Number,
       required: false,
       default: 0,
-    },
+    }
+    
   },
   { timestamps: true } //ceratedAt va updatedAt
 );

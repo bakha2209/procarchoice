@@ -126,7 +126,7 @@ class Community {
 
       const result = await this.boArticleModel.findById({ _id: art_id }).exec();
       assert.ok(result, Definer.article_err3);
-
+      console.log("result:",result)
       return result;
     } catch (err) {
       throw err;

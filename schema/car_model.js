@@ -103,6 +103,16 @@ const carSchema = new mongoose.Schema(
       required: false,
       default: 0,
     },
+    car_reviews: {
+      type: Array,
+      required: false,
+      default: []
+    },
+    car_rating: {
+      type: Number,
+      required: false,
+      default:0
+    },
     dealer_mb_id: {
       type: Schema.Types.ObjectId,
       ref: "Member",

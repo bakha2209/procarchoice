@@ -126,6 +126,31 @@ memberController.likeMemberChosen = async (req, res) => {
     res.json({ state: "fail", message: err.message });
   }
 };
+memberController.reviewMemberChosen = async (req, res) => {
+  try {
+    console.log("GET cont/reviewMemberChosen");
+    assert.ok(req.member, Definer.auth_err5);
+
+    const member = new Member(),
+      review_ref_id = req.body.review_ref_id,
+      group_type = req.body.group_type,
+      review = req.body.review,
+      rating= req.body.rating
+
+    const result = await member.reviewChosenItemByMember(
+      req.member,
+      review_ref_id,
+      group_type,
+      review,
+      rating
+    );
+
+    res.json({ state: "success", data: result });
+  } catch (err) {
+    console.log(`ERROR, cont/reviewMemberChosen, ${err.message}`);
+    res.json({ state: "fail", message: err.message });
+  }
+}
 
 memberController.updateMember = async (req, res) => {
   try {

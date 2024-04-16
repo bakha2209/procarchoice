@@ -9,6 +9,7 @@ const {
 } = require("../lib/config");
 const View = require("./View");
 const Like = require("./Like");
+const Review = require("./Review")
 
 class Member {
   constructor() {
@@ -138,6 +139,32 @@ class Member {
     }
   }
 
+  async reviewChosenItemByMember(member, review_ref_id, group_type,review,rating) {
+    try {
+      const mb_id = shapeIntoMongooseObjectId(member._id);
+      review_ref_id = shapeIntoMongooseObjectId(review_ref_id);
+
+      const review_check = new Review(mb_id);
+      const isValid = await review_check.validateTargetItem(review_ref_id, group_type);
+      assert.ok(isValid, Definer.general_err2);
+
+     
+
+      let data = await review_check.insertMemberReview(review_ref_id, group_type,review,rating);
+
+      const result = {
+        review_group: data.review_group,
+        review_ref_id: data.review_ref_id,
+        reviews: review,
+        rating: data.rating
+      };
+      console.log("result", result)
+      return result;
+    } catch (err) {
+      throw err;
+    }
+  }
+
   async updateMemberData(id, data, image) {
     try {
       const mb_id = shapeIntoMongooseObjectId(id);
@@ -162,6 +189,8 @@ class Member {
       throw err;
     }
   }
+
+  
 }
 
 module.exports = Member;
