@@ -3,7 +3,8 @@ const MemberModel = require("../schema/member_model");
 const CarModel = require("../schema/car_model");
 const BoArticleModel = require("../schema/bo_article.model");
 const Definer = require("../lib/mistake");
-
+const assert = require("assert");
+const {shapeIntoMongooseObjectId} =require("../lib/config")
 class Review {
   constructor(mb_id) {
     this.reviewModel = ReviewModel;
@@ -104,6 +105,41 @@ class Review {
       }
 
       return true;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  async getAllReviewsData(member, data) {
+    try {
+        const review_id = shapeIntoMongooseObjectId(data.review_ref_id);
+      const matches = {
+        review_group: data.group_type,
+        review_ref_id: review_id,
+        // review_status: "active",
+      };
+      data.limit *=1;
+      data.page *=1;
+      const sort = { [data.order]: -1 };
+      const result = await this.reviewModel.aggregate([
+        { $match: matches },
+          { $sort: sort },
+          { $skip: (data.page - 1) * data.limit },
+          { $limit: data.limit },
+          {
+            $lookup: {
+              from: "members",
+              localField: "mb_id",
+              foreignField: "_id",
+              as: "member_data",
+            },
+          },
+          { $unwind: "$member_data" },
+      ]).exec();
+      console.log("result:::", result);
+      assert.ok(result, Definer.article_err3);
+
+      return result;
     } catch (err) {
       throw err;
     }

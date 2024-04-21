@@ -2,6 +2,7 @@ const Member = require("../models/Member");
 const assert = require("assert");
 const jwt = require("jsonwebtoken");
 const Definer = require("../lib/mistake");
+const Review = require("../models/Review");
 
 let memberController = module.exports;
 
@@ -148,6 +149,18 @@ memberController.reviewMemberChosen = async (req, res) => {
     res.json({ state: "success", data: result });
   } catch (err) {
     console.log(`ERROR, cont/reviewMemberChosen, ${err.message}`);
+    res.json({ state: "fail", message: err.message });
+  }
+}
+memberController.getAllReviews = async (req, res) => {
+  try{
+    console.log(`POST: cont/getAllReviews`);
+    const reviews= new Review()
+    const result = await reviews.getAllReviewsData(req.member, req.body)
+
+    res.json({ state: "success", data: result });
+  } catch (err) {
+    console.log(`ERROR, cont/getAllReviews, ${err.message}`);
     res.json({ state: "fail", message: err.message });
   }
 }

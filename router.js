@@ -35,6 +35,12 @@ router.post(
   memberController.retrieveAuthMember,
   memberController.reviewMemberChosen
 );
+router.post(
+  "/member/reviews",
+  memberController.retrieveAuthMember,
+  memberController.getAllReviews
+
+)
 
 router.post(
   "/member/update",
@@ -42,6 +48,7 @@ router.post(
   uploader_member.single("mb_image"),
   memberController.updateMember
 );
+
 
 //Car related routers
 router.post(

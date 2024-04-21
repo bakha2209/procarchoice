@@ -1,11 +1,20 @@
 const mongoose = require("mongoose");
-const { like_view_group_list } = require("../lib/config");
+const { like_view_group_list, board_article_status_enum_list } = require("../lib/config");
 const Schema = mongoose.Schema;
 
 const reviewSchema = new mongoose.Schema(
   {
-    mb_id: { type: Schema.Types.ObjectId, required: true },
+    mb_id: { type: Schema.Types.ObjectId, ref: "Member",required: true },
     review_ref_id: { type: Schema.Types.ObjectId, required: true },
+    review_status: {
+        type: String,
+        required: false,
+        default: "active",
+        enum: {
+          values: board_article_status_enum_list,
+          message: "{VALUE} is not among permitted values",
+        },
+      },
     review_group: {
       type: String,
       required: true,
