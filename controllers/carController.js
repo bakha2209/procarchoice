@@ -1,6 +1,7 @@
 const assert = require("assert")
 const Definer = require("../lib/mistake");
 const Car = require("../models/Car")
+const Search =require("../models/Search")
 
 let carController = module.exports;
 
@@ -37,6 +38,21 @@ carController.getChosenCar = async (req, res) => {
     res.json({ state: "success", data: result });
   } catch (err) {
     console.log(`ERROR, cont/getChosenCar, ${err.message}`)
+    res.json({state: 'fail', message: err.message})
+
+  }
+}
+
+carController.getSearchCars = async(req,res)=> {
+  try{
+    console.log("POST: cont/getSearchCars");
+    const data = req.params.name;
+    const search = new Search()
+    const result = await search.getSearchCarsData(req.member, data)
+    res.json({ state: "success", data: result });
+
+  } catch(err) {
+    console.log(`ERROR, cont/getSearchCars, ${err.message}`)
     res.json({state: 'fail', message: err.message})
 
   }
