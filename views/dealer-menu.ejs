@@ -356,7 +356,7 @@
     //event status changer
     $(".new_event_status").on("change", async function(e) {
       const id = e.target.id;
-      const car_status = $(`#${id}.new_event_status`).val();
+      const event_status = $(`#${id}.new_event_status`).val();
       const mb_id = '<%= member._id %>';
 
       try {
