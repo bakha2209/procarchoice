@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+
 const {
   board_id_enum_list,
   board_article_status_enum_list,
