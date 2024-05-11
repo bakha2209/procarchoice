@@ -169,12 +169,12 @@ memberController.updateMember = async (req, res) => {
   try {
     console.log("GET cont/updateMember");
     assert.ok(req.member, Definer.auth_err3);
-
+    
     const member = new Member();
     const result = await member.updateMemberData(
       req.member?._id,
       req.body,
-      req.file
+      req.file.replace(/\\/g,"/")
     );
 
     res.json({ state: "success", data: result });
