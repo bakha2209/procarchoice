@@ -174,7 +174,7 @@ memberController.updateMember = async (req, res) => {
     const result = await member.updateMemberData(
       req.member?._id,
       req.body,
-      req.file.path.replace(/\\/g,"/")
+      req.file
     );
 
     res.json({ state: "success", data: result });
