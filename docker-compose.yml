@@ -1,0 +1,22 @@
+version: '3.3'
+
+services:
+  node:
+    container_name: procar_backend
+    restart: always
+    image: node:16.10.0
+    ports:
+      - 3003:3003
+    volumes:
+      - ./:/usr/src/app
+    working_dir: /usr/src/app
+
+    networks:
+      - procar_network
+
+    # PRODUCTION
+    command: bash -c "npm install && npm run start:prod"
+
+networks:
+  procar_network:
+    driver: bridge  
